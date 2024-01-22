@@ -1,0 +1,4 @@
+1601001	Abc	Computer
+1601003	Xyz	IT
+1601004	Def	Mech
+1601005	Ghi	CBZ

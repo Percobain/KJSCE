@@ -1,0 +1,155 @@
+/* style.css */
+
+/* Reset some default browser styles */
+body, ul {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+}
+
+header h1 {
+    font-size: 2em;
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin: 0 10px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.home {
+    background-image: url('bgimg2.jpeg');
+    background-size: cover;
+    text-align: center;
+    padding: 100px 0;
+    color: #333;
+}
+
+.home img {
+    margin-bottom: 40px; /* This line adds space between the image and the heading */
+}
+
+/* ...other CSS styles... */
+
+
+.cta-button {
+    display: inline-block;
+    background-color: #0073e6;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-top: 20px;
+}
+
+
+
+.importance {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: #f8f8f8; /* Add a light background color */
+}
+
+.importance h2 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 20px; /* Add some space below the heading */
+}
+
+.importance p {
+    max-width: 600px;
+    margin: 0 auto;
+    color: #555;
+    line-height: 1.4;
+}
+
+.importance {
+    background-image: url('bgimg3.jpeg'); /* Replace with the path to your background image */
+    background-size: cover;
+    background-position: center;
+    color: #fff; /* Set text color to white or a suitable contrast color for better readability on the background */
+    padding: 50px 0;
+}
+
+
+.services {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    /* background-image: url('bgimg1.jpeg'); */
+}
+
+.services ul {
+    list-style: none;
+    padding: 0;
+}
+
+.services ul li {
+    margin: 10px 0;
+}
+
+.services ul li a {
+    text-decoration: none;
+    color: #0073e6;
+}
+
+.blog {
+    background-image: url('bgimgblog.avif'); /* Replace with the path to your background image */
+    background-size: cover;
+    background-position: center;
+    color: #010000; /* Set text color to white or a suitable contrast color for better readability on the background */
+    padding: 50px 0;
+}
+
+.services, .about {
+    background-image: url('bgimg3.jpeg'); /* Replace with the path to your background image */
+    background-size: cover;
+    background-position: center;
+    color: #130404; /* Set text color to white or a suitable contrast color for better readability on the background */
+    padding: 50px 0;
+}
+
+.contact {
+    background-image: url('bgimg1.jpeg'); /* Replace with the path to your background image */
+    background-size: cover;
+    background-position: center;
+    color: #130404; /* Set text color to white or a suitable contrast color for better readability on the background */
+    padding: 50px 0;
+}
+.about, .blog, .contact {
+    text-align: left;
+    padding: 100px ;
+    /* background-image: url('bgimg2.jpeg'); */
+}
+
+.about p, .blog article p, .contact p {
+    max-width: 100%;
+}
+
+footer {
+    text-align: center;
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+}
