@@ -1,2 +1,3 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+SEM-3/ITVC/Higher[[:space:]]Engineering[[:space:]]Mathematics[[:space:]]BS[[:space:]]Grewal.pdf filter=lfs diff=lfs merge=lfs -text
