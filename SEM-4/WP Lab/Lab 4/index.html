@@ -1,0 +1,45 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+ 
+<head> 
+    <meta charset="UTF-8"> 
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Exp 3</title> 
+    <link rel="stylesheet" href="index.css"> 
+</head> 
+ 
+<body> 
+    <input type="text" id="dateInput"> 
+    <button onclick="displayDate()">Display Date</button> 
+    <p>Shreyans Tatiya 16010123325</p>
+</body> 
+ 
+<script> 
+    // function displayDate() { 
+    //     const dateInput = document.getElementById("dateInput"); 
+    //     const today = new Date(); 
+    //     const date = today.getDate(); 
+    //     const month = today.getMonth() + 1; 
+    //     const year = today.getFullYear(); 
+    //     const formattedDate = `${year}-${month}-${date}`; 
+    //     dateInput.value = formattedDate; 
+    // }
+
+
+    const n = parseInt(prompt("Enter a number: ")); 
+    let factorial = 1; 
+    for (let i = 1; i <= n; i++) { 
+        factorial *= i; 
+    } 
+    alert(`Factorial of ${n} is ${factorial}`); 
+
+
+
+    const a = parseInt(prompt("Enter a number: ")); 
+    for (let i = 1; i <= 10; i++) { 
+        const result = a * i; 
+        console.log(`${a} x ${i} = ${result}`); 
+    }
+</script> 
+</html>

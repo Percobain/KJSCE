@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combined Exercises</title>
+</head>
+<body>
+    <header>
+        <h1>Shreyans Tatiya</h1>
+        <p>Roll Number: 16010123325</p>
+    </header>
+
+    <section id="registrationSection">
+        <h2>Registration Form</h2>
+        <form id="registrationForm">
+            <label for="nameInput">Name:</label>
+            <input type="text" id="nameInput" required>
+
+            <label for="passwordInput">Password:</label>
+            <input type="password" id="passwordInput" minlength="6" required>
+
+            <label for="emailInput">Email:</label>
+            <input type="email" id="emailInput" required>
+
+            <label for="phoneInput">Phone:</label>
+            <input type="tel" id="phoneInput" pattern="[0-9]{10}" required>
+
+            <button type="submit">Register</button>
+        </form>
+    </section>
+
+    <section id="multiplicationSection">
+        <h2>Multiplication Table</h2>
+        <div>
+            <label for="numberInput">Enter a number:</label>
+            <input type="number" id="numberInput">
+            <button onclick="generateTable()">Generate Table</button>
+            <div id="multiplicationTable"></div>
+        </div>
+    </section>
+
+    <section id="dateSection">
+        <h2>Display Date</h2>
+        <div>
+            <input type="text" id="dateInput">
+            <button onclick="displayDate()">Display Date</button>
+        </div>
+    </section>
+
+    <section id="factorialSection">
+        <h2>Factorial Calculator</h2>
+        <div>
+            <button onclick="calculateFactorial()">Calculate Factorial</button>
+            <p id="factorialResult"></p>
+        </div>
+    </section>
+
+    <script>
+        // Registration Form Validation
+        const nameInput = document.getElementById("nameInput");
+        const passwordInput = document.getElementById("passwordInput");
+        const emailInput = document.getElementById("emailInput");
+        const phoneInput = document.getElementById("phoneInput");
+        const registrationForm = document.getElementById("registrationForm");
+
+        function validateName() {
+            const name = nameInput.value.trim();
+            if (/^[a-zA-Z]{6,}$/.test(name)) {
+                nameInput.setCustomValidity("");
+            } else {
+                nameInput.setCustomValidity(
+                    "Name should contain alphabets and the length should not be less than 6 characters.");
+            }
+        }
+
+        function validatePassword() {
+            const password = passwordInput.value;
+            if (password.length >= 6) {
+                passwordInput.setCustomValidity("");
+            } else {
+                passwordInput.setCustomValidity("Password should not be less than 6 characters length.");
+            }
+        }
+
+        function validateEmail() {
+            const email = emailInput.value.trim();
+            if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                emailInput.setCustomValidity("");
+            } else {
+                emailInput.setCustomValidity("Invalid email format.");
+            }
+        }
+
+        function validatePhone() {
+            const phone = phoneInput.value.trim();
+            if (/^[0-9]{10}$/.test(phone)) {
+                phoneInput.setCustomValidity("");
+            } else {
+                phoneInput.setCustomValidity("Phone number should contain 10 digits only.");
+            }
+        }
+
+        nameInput.addEventListener("input", validateName);
+        passwordInput.addEventListener("input", validatePassword);
+        emailInput.addEventListener("input", validateEmail);
+        phoneInput.addEventListener("input", validatePhone);
+
+        registrationForm.addEventListener("submit", function(event) {
+            event.preventDefault();
+            if (registrationForm.checkValidity()) {
+                alert("Registration successful!");
+                registrationForm.reset();
+            }
+        });
+
+        // Multiplication Table Generation
+        function generateTable() {
+            const numberInput = document.getElementById("numberInput");
+            const tableContainer = document.getElementById("multiplicationTable");
+            const n = parseInt(numberInput.value);
+
+            if (!isNaN(n)) {
+                let table = "<table><tr><th>Number</th><th>Multiplication</th></tr>";
+                for (let i = 1; i <= 10; i++) {
+                    table += `<tr><td>${n}</td><td>${n} x ${i} = ${n * i}</td></tr>`;
+                }
+                table += "</table>";
+                tableContainer.innerHTML = table;
+
+                // Log multiplication table to console
+                for (let i = 1; i <= 10; i++) {
+                    console.log(`${n} x ${i} = ${n * i}`);
+                }
+            } else {
+                tableContainer.innerHTML = "<p>Please enter a valid number.</p>";
+            }
+        }
+
+        // Display Date
+        function displayDate() {
+            const dateInput = document.getElementById("dateInput");
+            const today = new Date();
+            const date = today.getDate();
+            const month = today.getMonth() + 1;
+            const year = today.getFullYear();
+            const formattedDate = `${year}-${month}-${date}`;
+            dateInput.value = formattedDate;
+        }
+
+        // Factorial Calculator
+        function calculateFactorial() {
+            const n = parseInt(prompt("Enter a number: "));
+            if (!isNaN(n)) {
+                let factorial = 1;
+                for (let i = 1; i <= n; i++) {
+                    factorial *= i;
+                }
+                document.getElementById("factorialResult").textContent = `Factorial of ${n} is ${factorial}`;
+                alert(`Factorial of ${n} is ${factorial}`);
+            } else {
+                alert("Please enter a valid number.");
+            }
+        }
+
+        // Initial multiplication table (as per the original script)
+        const a = parseInt(prompt("Enter a number for initial multiplication table: "));
+        if (!isNaN(a)) {
+            for (let i = 1; i <= 10; i++) {
+                const result = a * i;
+                console.log(`${a} x ${i} = ${result}`);
+            }
+        }
+    </script>
+</body>
+</html>
+

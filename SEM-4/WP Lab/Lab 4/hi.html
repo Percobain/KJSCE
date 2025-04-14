@@ -1,0 +1,195 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+ 
+<head> 
+    <style> 
+        section { 
+            height: 100vh; 
+            width: 100%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            text-align: center; 
+            background-color: #f8f9fa; 
+        } 
+        /* Style the form container */ 
+        form { 
+            max-width: 500px; 
+            margin: 0 auto; 
+            padding: 2rem; 
+            background-color: #fff; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+            border-radius: 8px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+        } 
+ 
+        /* Style the form labels */ 
+        label { 
+            font-size: 1.2rem; 
+            margin-bottom: 0.5rem; 
+            color: #333; 
+        } 
+ 
+        /* Style the form inputs */ 
+        input { 
+            padding: 0.75rem; 
+            border-radius: 0.25rem; 
+            border: 1px solid #ccc; 
+            font-size: 1rem; 
+            margin-bottom: 1rem; 
+            width: 100%; 
+            box-sizing: border-box; 
+            transition: border-color 0.3s; 
+        } 
+ 
+        input:focus { 
+            border-color: #007bff; 
+            outline: none; 
+        } 
+ 
+        /* Style the form button */ 
+        button { 
+            background-color: #007bff; 
+            color: #fff; 
+            padding: 0.75rem 1.5rem; 
+            border-radius: 0.25rem; 
+            border: none; 
+            font-size: 1.2rem; 
+            cursor: pointer; 
+            margin-top: 1rem; 
+            transition: background-color 0.3s; 
+        } 
+ 
+        /* Style the form button on hover */ 
+        button:hover { 
+            background-color: #0069d9; 
+        } 
+    </style> 
+</head> 
+ 
+<body> 
+    <section> 
+        <form> 
+            <div> 
+                <label for="nameInput">Name:</label> 
+                <input type="text" id="nameInput" required> 
+            </div> 
+            <div> 
+                <label for="passwordInput">Password:</label> 
+                <input type="password" id="passwordInput" minlength="6" required> 
+            </div> 
+            <div> 
+                <label for="emailInput">Email:</label> 
+                <input type="email" id="emailInput" required> 
+            </div> 
+            <div> 
+                <label for="phoneInput">Phone:</label> 
+                <input type="tel" id="phoneInput" pattern="[0-9]{10}" required> 
+            </div> 
+            <button type="submit">Register</button> 
+        </form> 
+    </section> 
+</body> 
+ 
+<script> 
+    const nameInput = document.getElementById("nameInput"); 
+    const passwordInput = document.getElementById("passwordInput"); 
+    const emailInput = document.getElementById("emailInput"); 
+    const phoneInput = document.getElementById("phoneInput"); 
+ 
+    nameInput.addEventListener("input", validateName); 
+    passwordInput.addEventListener("input", validatePassword); 
+    emailInput.addEventListener("input", validateEmail); 
+    phoneInput.addEventListener("input", validatePhone); 
+
+    function validateName() { 
+        const name = nameInput.value.trim(); 
+        if (/^[a-zA-Z]{6,}$/.test(name)) { 
+            nameInput.setCustomValidity(""); 
+        } else { 
+            nameInput.setCustomValidity( 
+                "Name should contain alphabets and the length should not be less than 6 characters."); 
+        } 
+    } 
+ 
+    function validatePassword() { 
+        const password = passwordInput.value; 
+        if (password.length >= 6) { 
+            passwordInput.setCustomValidity(""); 
+        } else { 
+            passwordInput.setCustomValidity("Password should not be less than 6 characters length."); 
+        } 
+    } 
+ 
+    function validateEmail() { 
+        const email = emailInput.value.trim(); 
+        if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { 
+            emailInput.setCustomValidity(""); 
+        } else { 
+            emailInput.setCustomValidity("Invalid email format."); 
+        } 
+    } 
+ 
+    function validatePhone() { 
+        const phone = phoneInput.value.trim(); 
+        if (/^[0-9]{10}$/.test(phone)) { 
+            phoneInput.setCustomValidity(""); 
+        } else { 
+            phoneInput.setCustomValidity("Phone number should contain 10 digits only."); 
+        } 
+    } 
+</script> 
+</html>
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multiplication Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        table {
+            width: 50%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Multiplication Table</h1>
+    <script>
+        let n = prompt("Enter a number:");
+        if (n !== null) {
+            n = parseInt(n);
+            if (!isNaN(n)) {
+                let table = "<table><tr><th>Number</th><th>Multiplication</th></tr>";
+                for (let i = 1; i <= 10; i++) {
+                    table += `<tr><td>${n}</td><td>${n} x ${i} = ${n * i}</td></tr>`;
+                }
+                table += "</table>";
+                document.write(table);
+            } else {
+                document.write("Please enter a valid number.");
+            }
+        } else {
+            document.write("Input cancelled.");
+        }
+    </script>
+</body>
+</html>

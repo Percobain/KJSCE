@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libris - Your Online Book Haven</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Libris</h1>
+            <nav>
+                <a href="#home" class="nav-link active" data-section="home">Home</a>
+                <a href="#catalogue" class="nav-link" data-section="catalogue">Catalogue</a>
+                <a href="#login" class="nav-link" data-section="login">Login</a>
+                <a href="#register" class="nav-link" data-section="register">Register</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="home" class="active">
+            <div class="hero">
+                <h2>Welcome to Your Literary Journey</h2>
+                <p>Discover a world of stories, knowledge, and imagination at your fingertips.</p>
+                <a href="#catalogue" class="cta-button" data-section="catalogue">Explore Books</a>
+            </div>
+        </section>
+
+        <section id="catalogue">
+            <div class="container">
+                <h2>Book Catalogue</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Book Title</th>
+                                <th>Author</th>
+                                <th>Price (INR)</th>
+                                <th>Availability</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>The Alchemist</td>
+                                <td>Paulo Coelho</td>
+                                <td>499</td>
+                                <td class="in-stock">In Stock</td>
+                            </tr>
+                            <tr>
+                                <td>To Kill a Mockingbird</td>
+                                <td>Harper Lee</td>
+                                <td>399</td>
+                                <td class="in-stock">In Stock</td>
+                            </tr>
+                            <tr>
+                                <td>1984</td>
+                                <td>George Orwell</td>
+                                <td>349</td>
+                                <td class="out-of-stock">Out of Stock</td>
+                            </tr>
+                            <tr>
+                                <td>The Great Gatsby</td>
+                                <td>F. Scott Fitzgerald</td>
+                                <td>299</td>
+                                <td class="in-stock">In Stock</td>
+                            </tr>
+                            <tr>
+                                <td>The Book Thief</td>
+                                <td>Markus Zusak</td>
+                                <td>450</td>
+                                <td class="in-stock">In Stock</td>
+                            </tr>
+                            <tr>
+                                <td>Sapiens</td>
+                                <td>Yuval Noah Harari</td>
+                                <td>599</td>
+                                <td class="in-stock">In Stock</td>
+                            </tr>
+                            <tr>
+                                <td>The Catcher in the Rye</td>
+                                <td>J.D. Salinger</td>
+                                <td>375</td>
+                                <td class="out-of-stock">Out of Stock</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="login">
+            <div class="container">
+                <h2>Login</h2>
+                <form id="login-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="login-username">Username</label>
+                        <input type="text" id="login-username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="remember" checked>
+                            <span>Remember me</span>
+                        </label>
+                    </div>
+                    <button type="submit">Login</button>
+                    <p class="form-footer">
+                        <a href="#" class="forgot-password">Forgot password?</a>
+                    </p>
+                </form>
+            </div>
+        </section>
+
+        <section id="register">
+            <div class="container">
+                <h2>Register</h2>
+                <form id="register-form" class="auth-form">
+                    <div class="form-group">
+                        <label for="register-firstname">First Name</label>
+                        <input type="text" id="register-firstname" name="first_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-lastname">Last Name</label>
+                        <input type="text" id="register-lastname" name="last_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Email</label>
+                        <input type="email" id="register-email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Password</label>
+                        <input type="password" id="register-password" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="register-confirm-password">Confirm Password</label>
+                        <input type="password" id="register-confirm-password" name="confirm_password" required>
+                    </div>
+                    <button type="submit">Register</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Libris. All rights reserved.</p>
+            <p>Shreyans Tatiya E2 16010123325</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            function showSection(sectionId) {
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                });
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                });
+
+                const targetSection = document.getElementById(sectionId);
+                const targetLink = document.querySelector(`[data-section="${sectionId}"]`);
+
+                if (targetSection && targetLink) {
+                    targetSection.classList.add('active');
+                    targetLink.classList.add('active');
+                }
+            }
+
+            document.body.addEventListener('click', (e) => {
+                if (e.target.classList.contains('nav-link') || e.target.classList.contains('cta-button')) {
+                    e.preventDefault();
+                    const sectionId = e.target.getAttribute('data-section');
+                    showSection(sectionId);
+                }
+            });
+
+            // Form validation
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                // Add your login logic here
+                alert('Login functionality would be implemented here.');
+            });
+
+            registerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const password = document.getElementById('register-password').value;
+                const confirmPassword = document.getElementById('register-confirm-password').value;
+
+                if (password !== confirmPassword) {
+                    alert('Passwords do not match!');
+                    return;
+                }
+
+                // Add your registration logic here
+                alert('Registration functionality would be implemented here.');
+            });
+        });
+    </script>
+</body>
+</html>
