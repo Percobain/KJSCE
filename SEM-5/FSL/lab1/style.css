@@ -1,0 +1,21 @@
+body {
+  font-family: sans-serif;
+  padding: 20px;
+}
+
+button, input {
+  margin: 10px 5px;
+  padding: 5px 10px;
+}
+
+#toggleBox {
+  margin-top: 10px;
+  padding: 10px;
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+}
+
+#emailError {
+  color: red;
+  font-size: 0.9em;
+}
