@@ -1,0 +1,433 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>CAPTCHA</title>
+    <style>
+      body {
+        font-family: sans-serif;
+        max-width: 500px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+      .tabs {
+        display: flex;
+        gap: 0;
+        margin-bottom: 20px;
+      }
+      .tab-btn {
+        padding: 10px 24px;
+        border: 2px solid #333;
+        background: #eee;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: bold;
+      }
+      .tab-btn:first-child {
+        border-radius: 8px 0 0 8px;
+      }
+      .tab-btn:last-child {
+        border-radius: 0 8px 8px 0;
+      }
+      .tab-btn.active {
+        background: #333;
+        color: #fff;
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
+      #puzzleBox {
+        border: 2px solid #333;
+        border-radius: 10px;
+        padding: 24px;
+        background: #f9f9f0;
+        text-align: center;
+        min-height: 80px;
+        cursor: pointer;
+      }
+      #puzzleBox:hover {
+        background: #f0f0e4;
+      }
+      #puzzleQuestion {
+        font-size: 22px;
+        font-weight: bold;
+        color: #333;
+        margin: 0;
+      }
+      #puzzleType {
+        font-size: 12px;
+        color: #888;
+        margin-top: 8px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      input[type="text"] {
+        padding: 8px;
+        font-size: 16px;
+        width: 200px;
+      }
+      button {
+        padding: 8px 16px;
+        font-size: 15px;
+        cursor: pointer;
+      }
+      .status {
+        font-weight: bold;
+        margin-top: 10px;
+      }
+      .status.success {
+        color: green;
+      }
+      .status.fail {
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>CAPTCHA</h1>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="text">Text CAPTCHA</button>
+      <button class="tab-btn" data-tab="puzzle">Puzzle CAPTCHA</button>
+    </div>
+
+    <!-- ── Text CAPTCHA ── -->
+    <div id="tab-text" class="tab-content active">
+      <canvas id="captchaCanvas" width="260" height="80"></canvas>
+      <p>Click on the image to get a new CAPTCHA.</p>
+
+      <p>
+        <label for="captchaInput">Enter the text shown above:</label><br />
+        <input id="captchaInput" type="text" />
+        <button id="submitBtn">Submit</button>
+      </p>
+
+      <p id="status" class="status"></p>
+    </div>
+
+    <!-- ── Puzzle CAPTCHA ── -->
+    <div id="tab-puzzle" class="tab-content">
+      <div id="puzzleBox">
+        <p id="puzzleQuestion">Loading puzzle...</p>
+        <p id="puzzleType"></p>
+      </div>
+      <p>Click on the puzzle to get a new one.</p>
+
+      <p>
+        <label for="puzzleInput">Your answer:</label><br />
+        <input id="puzzleInput" type="text" />
+        <button id="puzzleSubmitBtn">Submit</button>
+      </p>
+
+      <p id="puzzleStatus" class="status"></p>
+    </div>
+
+    <script>
+      const SERVER_URL = "http://localhost:8080";
+
+      // ── Tab switching ──
+      document.querySelectorAll(".tab-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".tab-btn")
+            .forEach((b) => b.classList.remove("active"));
+          document
+            .querySelectorAll(".tab-content")
+            .forEach((c) => c.classList.remove("active"));
+          btn.classList.add("active");
+          document
+            .getElementById("tab-" + btn.dataset.tab)
+            .classList.add("active");
+
+          if (btn.dataset.tab === "puzzle" && !currentPuzzleId) {
+            requestPuzzle();
+          }
+        });
+      });
+
+      // ════════════════════════════════════
+      //  TEXT CAPTCHA (existing)
+      // ════════════════════════════════════
+      const canvas = document.getElementById("captchaCanvas");
+      const ctx = canvas.getContext("2d");
+      const input = document.getElementById("captchaInput");
+      const statusEl = document.getElementById("status");
+      const submitBtn = document.getElementById("submitBtn");
+
+      let currentCaptchaId = null;
+      let currentCaptchaText = "";
+
+      async function requestCaptcha() {
+        try {
+          const res = await fetch(SERVER_URL + "/captcha", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({}),
+          });
+          if (!res.ok) {
+            throw new Error("Failed to fetch CAPTCHA");
+          }
+          const data = await res.json();
+          currentCaptchaId = data.id;
+          currentCaptchaText = (data.captcha || "").toString();
+          drawCaptcha(currentCaptchaText);
+          statusEl.textContent = "";
+          statusEl.className = "status";
+        } catch (err) {
+          drawError("Error requesting CAPTCHA");
+          statusEl.textContent = "Could not contact server.";
+          statusEl.className = "status fail";
+          console.error(err);
+        }
+      }
+
+      function drawBackground() {
+        const w = canvas.width;
+        const h = canvas.height;
+
+        ctx.fillStyle = "#eeeeee";
+        ctx.fillRect(0, 0, w, h);
+
+        for (let i = 0; i < 80; i += 1) {
+          const x = Math.random() * w;
+          const y = Math.random() * h;
+          ctx.fillStyle = "#cccccc";
+          ctx.fillRect(x, y, 1, 1);
+        }
+
+        for (let i = 0; i < 5; i += 1) {
+          ctx.beginPath();
+          ctx.moveTo(Math.random() * w, Math.random() * h);
+          ctx.lineTo(Math.random() * w, Math.random() * h);
+          ctx.strokeStyle = "#999999";
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      }
+
+      function drawCaptcha(text) {
+        const w = canvas.width;
+        const h = canvas.height;
+
+        ctx.clearRect(0, 0, w, h);
+        drawBackground();
+
+        if (!text) {
+          return;
+        }
+
+        const fontSize = 32;
+        ctx.textBaseline = "middle";
+        ctx.textAlign = "center";
+
+        const charCount = text.length;
+        const sectionWidth = w / (charCount + 1);
+
+        for (let i = 0; i < charCount; i += 1) {
+          const ch = text[i];
+          const x = sectionWidth * (i + 1);
+          const baseY = h / 2;
+          const offsetY = (Math.random() - 0.5) * 18;
+          const angle = (Math.random() - 0.5) * 0.6;
+
+          ctx.save();
+          ctx.translate(x, baseY + offsetY);
+          ctx.rotate(angle);
+
+          ctx.fillStyle = "#333333";
+          ctx.font = "bold " + fontSize + "px sans-serif";
+
+          ctx.fillText(ch, 0, 0);
+          ctx.restore();
+        }
+
+        for (let i = 0; i < 4; i += 1) {
+          ctx.beginPath();
+          ctx.strokeStyle = "#777777";
+          ctx.lineWidth = 1;
+          const startX = Math.random() * w;
+          const startY = Math.random() * h;
+          const radius = 20 + Math.random() * 40;
+          const startAngle = Math.random() * Math.PI * 2;
+          const endAngle = startAngle + Math.random() * Math.PI;
+          ctx.arc(startX, startY, radius, startAngle, endAngle, false);
+          ctx.stroke();
+        }
+      }
+
+      function drawError(message) {
+        const w = canvas.width;
+        const h = canvas.height;
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = "#ffdddd";
+        ctx.fillRect(0, 0, w, h);
+        ctx.fillStyle = "#990000";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = "14px sans-serif";
+        ctx.fillText(message, w / 2, h / 2);
+      }
+
+      async function submitCaptcha() {
+        const value = input.value.trim();
+        if (!value || !currentCaptchaId) {
+          statusEl.textContent = "Please enter the text from the image.";
+          statusEl.className = "status fail";
+          return;
+        }
+
+        statusEl.textContent = "Checking with server...";
+        statusEl.className = "status";
+
+        try {
+          const res = await fetch(SERVER_URL + "/captcha/validate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: currentCaptchaId, answer: value }),
+          });
+
+          const data = await res.json();
+
+          if (!res.ok) {
+            statusEl.textContent =
+              data.error || "Server error during validation.";
+            statusEl.className = "status fail";
+            await requestCaptcha();
+            input.value = "";
+            return;
+          }
+
+          if (data.success) {
+            statusEl.textContent = "CAPTCHA passed (validated by server).";
+            statusEl.className = "status success";
+          } else {
+            statusEl.textContent =
+              data.message || "CAPTCHA failed (server rejected the answer).";
+            statusEl.className = "status fail";
+            await requestCaptcha();
+            input.value = "";
+          }
+        } catch (err) {
+          console.error(err);
+          statusEl.textContent = "Could not reach server for validation.";
+          statusEl.className = "status fail";
+        }
+      }
+
+      canvas.addEventListener("click", function () {
+        requestCaptcha();
+        input.value = "";
+      });
+
+      submitBtn.addEventListener("click", function () {
+        submitCaptcha();
+      });
+
+      input.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          submitCaptcha();
+        }
+      });
+
+      requestCaptcha();
+
+      // ════════════════════════════════════
+      //  PUZZLE CAPTCHA
+      // ════════════════════════════════════
+      const puzzleQuestion = document.getElementById("puzzleQuestion");
+      const puzzleTypeEl = document.getElementById("puzzleType");
+      const puzzleBox = document.getElementById("puzzleBox");
+      const puzzleInput = document.getElementById("puzzleInput");
+      const puzzleSubmitBtn = document.getElementById("puzzleSubmitBtn");
+      const puzzleStatus = document.getElementById("puzzleStatus");
+
+      let currentPuzzleId = null;
+
+      async function requestPuzzle() {
+        try {
+          const res = await fetch(SERVER_URL + "/puzzle", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({}),
+          });
+          if (!res.ok) throw new Error("Failed to fetch puzzle");
+          const data = await res.json();
+          currentPuzzleId = data.id;
+          puzzleQuestion.textContent = data.question;
+          puzzleTypeEl.textContent = data.type;
+          puzzleStatus.textContent = "";
+          puzzleStatus.className = "status";
+        } catch (err) {
+          puzzleQuestion.textContent = "Error loading puzzle";
+          puzzleStatus.textContent = "Could not contact server.";
+          puzzleStatus.className = "status fail";
+          console.error(err);
+        }
+      }
+
+      async function submitPuzzle() {
+        const value = puzzleInput.value.trim();
+        if (!value || !currentPuzzleId) {
+          puzzleStatus.textContent = "Please enter your answer.";
+          puzzleStatus.className = "status fail";
+          return;
+        }
+
+        puzzleStatus.textContent = "Checking...";
+        puzzleStatus.className = "status";
+
+        try {
+          const res = await fetch(SERVER_URL + "/puzzle/validate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: currentPuzzleId, answer: value }),
+          });
+
+          const data = await res.json();
+
+          if (!res.ok) {
+            puzzleStatus.textContent = data.error || "Server error.";
+            puzzleStatus.className = "status fail";
+            await requestPuzzle();
+            puzzleInput.value = "";
+            return;
+          }
+
+          if (data.success) {
+            puzzleStatus.textContent = "Puzzle solved! CAPTCHA passed.";
+            puzzleStatus.className = "status success";
+          } else {
+            puzzleStatus.textContent = data.message || "Wrong answer!";
+            puzzleStatus.className = "status fail";
+            await requestPuzzle();
+            puzzleInput.value = "";
+          }
+        } catch (err) {
+          console.error(err);
+          puzzleStatus.textContent = "Could not reach server.";
+          puzzleStatus.className = "status fail";
+        }
+      }
+
+      puzzleBox.addEventListener("click", () => {
+        requestPuzzle();
+        puzzleInput.value = "";
+      });
+
+      puzzleSubmitBtn.addEventListener("click", () => {
+        submitPuzzle();
+      });
+
+      puzzleInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          submitPuzzle();
+        }
+      });
+    </script>
+  </body>
+</html>

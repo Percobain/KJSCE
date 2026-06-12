@@ -1,0 +1,21 @@
+{
+  "name": "captcha-server",
+  "version": "1.0.0",
+  "description": "Simple text-based CAPTCHA server for CLI client validation",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [
+    "captcha",
+    "cli",
+    "server"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "uuid": "^11.0.3"
+  }
+}
